@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Desert Passage</title>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- A-Frame (Three.js 포함) -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+  <!-- 컴포넌트·시스템은 a-scene보다 먼저 등록되어야 하므로 head에서 순서대로 로드 -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/narrative.js"></script>
+  <script src="js/game-state.js"></script>
+  <script src="js/audio-manager.js"></script>
+  <script src="js/world-builder.js"></script>
+  <script src="js/player-controller.js"></script>
+  <script src="js/character.js"></script>
+  <script src="js/camera-controller.js"></script>
+  <script src="js/interaction-manager.js"></script>
+  <script src="js/portal-manager.js"></script>
+  <script src="js/paradise-builder.js"></script>
+  <script src="js/environment-transition.js"></script>
+  <script src="js/cinematic.js"></script>
+  <script src="js/interactions/object-kit.js"></script>
+  <script src="js/interactions/compass.js"></script>
+  <script src="js/interactions/cube.js"></script>
+  <script src="js/interactions/radio.js"></script>
+  <script src="js/interactions/dvd.js"></script>
+  <script src="js/interactions/glider.js"></script>
+  <script src="js/interactions/beanie.js"></script>
+  <script src="main.js"></script>
+</head>
+
+<body>
+  <a-scene
+    renderer="antialias: false; colorManagement: true; toneMapping: ACESFilmic; exposure: 1.0"
+    vr-mode-ui="enabled: false"
+    background="color: #e29a4e"
+    loading-screen="dotsColor: #C77C3E; backgroundColor: #f3dcb6"
+    device-orientation-permission-ui="enabled: false">
+
+    <!-- 조명: 값은 config.js(lighting)에서 덮어씁니다 -->
+    <a-entity id="hemi-light" light="type: hemisphere; color: #ffe2bd; groundColor: #6d5848; intensity: 1.05"></a-entity>
+    <a-entity id="sun-light" light="type: directional; color: #ffd6a0; intensity: 3"></a-entity>
+
+    <!-- 플레이어: 위치·이동·충돌은 #player, 모양·포즈는 #avatar -->
+    <a-entity id="player" player-controller>
+      <a-entity id="avatar" wanderer-avatar></a-entity>
+    </a-entity>
+
+    <!-- 카메라: 고정 1인칭 + 인터랙션 시 3인칭 시네마틱 (camera-director) -->
+    <a-entity id="camera"
+      camera="fov: 70; near: 0.05; far: 70; active: true"
+      camera-director="target: #player; avatar: #avatar"></a-entity>
+
+    <!-- 사막 월드는 js/world-builder.js가 #desert-world로 생성합니다 -->
+  </a-scene>
+
+  <!-- ===== UI ===== -->
+  <div id="haze"></div>
+  <div id="fade"></div>
+  <div id="letterbox"><i></i><i></i></div>
+  <div id="crosshair"></div>
+  <div id="prompt"></div>
+  <div id="toast"></div>
+
+  <div id="hud">
+    <ul>
+      <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 걷기 · <kbd>Shift</kbd> 빠르게</li>
+      <li><kbd>마우스</kbd> 시점 · <kbd>E</kbd> 상호작용</li>
+      <li><kbd>C</kbd> 나침반 · <kbd>Space</kbd> 자막 넘기기</li>
+      <li><kbd>Esc</kbd> 마우스 해제 · <kbd>`</kbd> 디버그</li>
+    </ul>
+  </div>
+
+
+  <div id="resume-hint">화면을 클릭하면 시점 조작이 다시 활성화됩니다</div>
+  <pre id="debug-panel"></pre>
+
+  <div id="start-overlay">
+    <div class="panel">
+      <p class="eyebrow">Interactive 3D Media</p>
+      <h1>Desert Passage</h1>
+      <p class="desc">바람이 부는 사막, 이름 없는 방랑자.</p>
+      <button type="button" id="start-button" disabled>불러오는 중…</button>
+      <p class="small">소리를 켜고 플레이해 주세요 · 일부 영상·사운드는 임시 구현</p>
+    </div>
+  </div>
+</body>
+</html>
